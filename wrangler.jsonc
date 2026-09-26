@@ -1,0 +1,13 @@
+{
+  // Cloudflare Worker + Durable Object that hosts multiplayer poker rooms.
+  // Local: `npm run dev:rooms`. Deploy: `npm run deploy:rooms` (needs a free Cloudflare account).
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jev-poker-rooms",
+  "main": "party/server.ts",
+  "compatibility_date": "2026-09-01",
+  "durable_objects": {
+    "bindings": [{ "name": "PokerRoom", "class_name": "PokerRoom" }]
+  },
+  // Free plan requires SQLite-backed Durable Objects
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["PokerRoom"] }]
+}
