@@ -2,6 +2,7 @@
 import { useState } from "react";
 import type { ClientMessage } from "@/lib/room/protocol";
 import { useGame } from "@/store/game";
+import { JevUnlock } from "./JevUnlock";
 
 export function RoomPanel({ send, connected }: { send: (m: ClientMessage) => void; connected: boolean }) {
   const room = useGame((s) => s.room);
@@ -98,7 +99,13 @@ export function RoomPanel({ send, connected }: { send: (m: ClientMessage) => voi
           </button>
         )}
       </div>
-      {isHost && !jev.available && jev.checked && (
+      {isHost && jev.locked && (
+        <div className="mt-3 flex flex-wrap items-center gap-2 text-[11px] text-muted">
+          <span>Coaching uses the math engine until you unlock Jev:</span>
+          <JevUnlock />
+        </div>
+      )}
+      {isHost && !jev.available && !jev.locked && jev.checked && (
         <p className="mt-2 text-[11px] text-warn/80">No Jev API key on this server, so coaching uses the math engine.</p>
       )}
       {!isHost && me && (

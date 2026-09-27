@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useGame } from "@/store/game";
+import { JevUnlock } from "./JevUnlock";
 
 export function Header() {
   const mode = useGame((s) => s.mode);
@@ -40,10 +41,11 @@ export function Header() {
           className={`rounded-full border px-2.5 py-1 font-semibold ${
             jev.available ? "border-good/40 text-good" : "border-warn/40 text-warn"
           }`}
-          title={jev.available ? "Decisions come from TypeSafe's Jev" : "Set TYPESAFE_API_KEY to enable Jev"}
+          title={jev.available ? "Decisions come from TypeSafe's Jev" : jev.locked ? "Jev is locked to the site owner" : "Set TYPESAFE_API_KEY to enable Jev"}
         >
           {jev.checked ? (jev.available ? "● Jev online" : "● Math-only") : "…"}
         </span>
+        <JevUnlock />
         <div className="flex overflow-hidden rounded-full border border-cream/20">
           {(["coach", "quiz"] as const).map((m) => (
             <button

@@ -64,7 +64,7 @@ interface Store {
   handNumber: number;
   mode: "coach" | "quiz";
   revealBots: boolean;
-  jev: { checked: boolean; available: boolean; model: string | null };
+  jev: { checked: boolean; available: boolean; locked: boolean; model: string | null };
   reads: Record<string, ReadResponse>;
   readPending: Record<string, boolean>;
   stats: Record<string, SessionStats>;
@@ -281,7 +281,7 @@ export const useGame = create<Store>((set, get) => {
     handNumber: 0,
     mode: "coach",
     revealBots: false,
-    jev: { checked: false, available: false, model: null },
+    jev: { checked: false, available: false, locked: false, model: null },
     reads: {},
     readPending: {},
     stats: {},
@@ -312,9 +312,9 @@ export const useGame = create<Store>((set, get) => {
       try {
         const r = await fetch("/api/status");
         const j = await r.json();
-        set({ jev: { checked: true, available: !!j.jev, model: j.model } });
+        set({ jev: { checked: true, available: !!j.jev, locked: !!j.locked, model: j.model } });
       } catch {
-        set({ jev: { checked: true, available: false, model: null } });
+        set({ jev: { checked: true, available: false, locked: false, model: null } });
       }
     },
 

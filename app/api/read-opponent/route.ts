@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isOwner } from "@/lib/jev/auth";
 import { jevClient } from "@/lib/jev/client";
 import {
   AGGRESSION_RUBRIC,
@@ -11,6 +12,7 @@ import {
 import type { ReadRequest, ReadResponse } from "@/lib/jev/types";
 
 export async function POST(req: Request) {
+  if (!isOwner(req)) return NextResponse.json({ error: "locked" }, { status: 401 });
   const client = jevClient();
   if (!client) return NextResponse.json({ error: "no-key" }, { status: 503 });
   const body = (await req.json()) as ReadRequest;
